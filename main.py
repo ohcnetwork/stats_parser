@@ -3,11 +3,10 @@ import re
 import json
 import requests
 from datetime import datetime
+import os
 
 
 def parse_pdf(request):
-    # TODO move to env
-    webhook = "https://hooks.slack.com/services/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"
     if request.args and "url" in request.args:
         url = request.args.get("url")
         tables = camelot.read_pdf(url, pages="all", flavor="lattice")
@@ -141,18 +140,23 @@ def parse_pdf(request):
                 continue
             t = row[1][0].strip()
             data[t]["active"] = data[t]["active"] + int(row[1][1])
-        _data = {"kerala": data, "file_url": url, "time": datetime.now().isoformat()}
+        _data = {"kerala": data, "time": datetime.now().isoformat()}
         data_json = json.dumps(_data)
-        payload = {
-            "text": data_json,
-            "username": "parser_bot",
-            "icon_emoji": ":robot_face:",
-        }
-        response = requests.post(
-            webhook,
-            data=json.dumps(payload),
-            headers={"Content-Type": "application/json"},
-        )
+        if (
+            request.args
+            and "test" in request.args
+            and not int(request.args.get("test"))
+        ):
+            payload = {
+                "text": data_json,
+                "username": "parser_bot",
+                "icon_emoji": ":robot_face:",
+            }
+            response = requests.post(
+                os.environ.get("WEBHOOK"),
+                data=json.dumps(payload),
+                headers={"Content-Type": "application/json"},
+            )
         return data_json
     else:
         return f"No url"
