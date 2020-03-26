@@ -48,7 +48,7 @@ def parse_pdf(request):
                 "corona_positive": 0,
                 "cured_discharged": 0,
                 "deaths": 0,
-                "active": 0,
+                "positive_admitted": 0,
             }
         i = 1
         if "patient" in chro[0][0]:
@@ -139,7 +139,7 @@ def parse_pdf(request):
             if "Total" in row[1][0]:
                 continue
             t = row[1][0].strip()
-            data[t]["active"] = data[t]["active"] + int(row[1][1])
+            data[t]["positive_admitted"] = data[t]["positive_admitted"] + int(row[1][1])
         _data = {"kerala": data, "time": datetime.now().isoformat()}
         data_json = json.dumps(_data)
         test = 0
