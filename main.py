@@ -142,11 +142,10 @@ def parse_pdf(request):
             data[t]["active"] = data[t]["active"] + int(row[1][1])
         _data = {"kerala": data, "time": datetime.now().isoformat()}
         data_json = json.dumps(_data)
-        if (
-            request.args
-            and "test" in request.args
-            and not int(request.args.get("test"))
-        ):
+        test = 0
+        if request.args and "test" in request.args:
+            test = int(request.args.get("test"))
+        if not test:
             payload = {
                 "text": data_json,
                 "username": "parser_bot",
@@ -157,6 +156,7 @@ def parse_pdf(request):
                 data=json.dumps(payload),
                 headers={"Content-Type": "application/json"},
             )
+            print(response)
         return data_json
     else:
         return f"No url"
