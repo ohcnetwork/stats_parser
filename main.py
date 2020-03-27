@@ -181,7 +181,8 @@ def init_data():
 
 
 def send_res(request, data, db=False):
-    print(os.environ.get("WEBHOOK"))
+    webhook_url = os.environ.get("WEBHOOK")
+    print(webhook_url)
     blocks = [
         {
             "type": "section",
@@ -206,7 +207,7 @@ def send_res(request, data, db=False):
         "icon_emoji": ":robot_face:",
     }
     response = requests.post(
-        os.environ.get("WEBHOOK"),
+        webhook_url,
         data=json.dumps(payload),
         headers={"Content-Type": "application/json"},
     )
