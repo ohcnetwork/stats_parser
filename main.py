@@ -141,22 +141,40 @@ def parse_pdf(request):
             t = row[1][0].strip()
             data[t]["positive_admitted"] = data[t]["positive_admitted"] + int(row[1][1])
         _data = {"kerala": data, "time": datetime.now().isoformat(), "file_url": url}
-        data_json = json.dumps(_data)
         test = 0
         if request.args and "test" in request.args:
             test = int(request.args.get("test"))
         if not test:
-            payload = {
-                "text": data_json,
-                "username": "parser_bot",
-                "icon_emoji": ":robot_face:",
-            }
-            response = requests.post(
-                os.environ.get("WEBHOOK"),
-                data=json.dumps(payload),
-                headers={"Content-Type": "application/json"},
-            )
-            print(response)
-        return data_json
+            send_res(request, _data)
+        return json.dumps(_data)
     else:
         return f"No url"
+
+
+def send_res(request, data):
+    print(os.environ.get("WEBHOOK"))
+    blocks = [
+        {
+            "type": "section",
+            "text": {"type": "mrkdwn", "text": f"Parsed <{data['file_url']}>"},
+        }
+    ]
+    for d in data["kerala"]:
+        blocks.append(
+            {"type": "section", "text": {"type": "mrkdwn", "text": f"*{d}:*"},}
+        )
+        tmp = []
+        for key, value in data["kerala"][d].items():
+            tmp.append({"type": "mrkdwn", "text": f"{key}:{value}"})
+        blocks.append({"type": "section", "fields": tmp})
+    payload = {
+        "blocks": json.dumps(blocks),
+        "username": "parser_bot",
+        "icon_emoji": ":robot_face:",
+    }
+    response = requests.post(
+        os.environ.get("WEBHOOK"),
+        data=json.dumps(payload),
+        headers={"Content-Type": "application/json"},
+    )
+    print(response)
