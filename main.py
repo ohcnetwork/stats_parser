@@ -39,7 +39,7 @@ def parse_pdf(request, db=False):
         return json.dumps(data)
     except Exception as e:
         if not test:
-            send_err_res(getattr(e, 'message', repr(e)))
+            send_err_res(getattr(e, "message", repr(e)))
         raise e
 
 
@@ -62,10 +62,15 @@ def parse(url):
                 dist = table.df
     # manual fix for bule_25032020.pdf
     if "bule_25032020" in url:
-        chro[2][4] = "Pathanamthitta – 4\nKottayam – 2 \nErnakulam -2"
+        print(url, "had to make some manual changes")
+        chro[0][2][4] = "Pathanamthitta – 4\nKottayam – 2 \nErnakulam -2"
+    # manual fix for bule_20032020.pdf
+    if "bule_20032020" in url:
+        chro[0][1][9] = "Thiruvananthapuram -3"
+        chro[0][1][10] = "Thiruvananthapuram -1"
     data = init_data()
     i = 1
-    if "patient" in chro[0][0]:
+    if "patient" in chro[0][0][0]:
         i = 0
     num, rem, dis = "", "", ""
 
@@ -101,6 +106,7 @@ def parse(url):
                             ] + int(t[1])
                 else:
                     for t in dis:
+                        # manual fix for 'Kasaragod' misspelled as 'Kasargod'
                         if t[0] == "Kasargod":
                             t[0] = "Kasaragod"
                         data[t[0]]["corona_positive"] = (
