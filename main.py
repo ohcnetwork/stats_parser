@@ -21,9 +21,15 @@ def parse_pdf(request, db=False):
         if request_json and "text" in request_json:
             url = request_json["text"]
         else:
-            raise ValueError("JSON is invalid, or missing a 'text' property")
+            msg = "JSON is invalid, or missing a 'text' property"
+            if not test:
+                send_err_res(msg)
+            raise ValueError(msg)
     else:
-        raise ValueError("No 'url' in param or wrong content type")
+        msg = "No 'url' in param or wrong content type"
+        if not test:
+            send_err_res(msg)
+        raise ValueError(msg)
     try:
         data = parse(url)
         if not test:
@@ -32,6 +38,8 @@ def parse_pdf(request, db=False):
             return data
         return json.dumps(data)
     except Exception as e:
+        if not test:
+            send_err_res(getattr(e, 'message', repr(e)))
         raise e
 
 
@@ -199,10 +207,29 @@ def send_res(request, data, db=False):
         blocks.append({"type": "section", "fields": tmp})
     if db:
         blocks.append(
-            {"type": "section", "text": {"type": "mrkdwn", "text": "*Updating Database...*"},}
+            {
+                "type": "section",
+                "text": {"type": "mrkdwn", "text": "*Updating Database...*"},
+            }
         )
     payload = {
         "blocks": json.dumps(blocks),
+        "username": "parser_bot",
+        "icon_emoji": ":robot_face:",
+    }
+    response = requests.post(
+        webhook_url,
+        data=json.dumps(payload),
+        headers={"Content-Type": "application/json"},
+    )
+    print(response)
+
+
+def send_err_res(msg):
+    webhook_url = os.environ.get("WEBHOOK")
+    print(webhook_url)
+    payload = {
+        "text": msg,
         "username": "parser_bot",
         "icon_emoji": ":robot_face:",
     }
