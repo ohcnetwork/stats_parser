@@ -140,7 +140,7 @@ def parse_pdf(request):
                 continue
             t = row[1][0].strip()
             data[t]["positive_admitted"] = data[t]["positive_admitted"] + int(row[1][1])
-        _data = {"kerala": data, "time": datetime.now().isoformat()}
+        _data = {"kerala": data, "time": datetime.now().isoformat(), "file_url": url}
         data_json = json.dumps(_data)
         test = 0
         if request.args and "test" in request.args:
