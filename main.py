@@ -70,7 +70,9 @@ def parse(url):
         chro[0][1][10] = "Thiruvananthapuram -1"
     # manual fix for Daily-Bulletin-HFWD-English-28th-March.pdf
     if "28th-March" in url:
-        chro[1][2][4] = "Thiruvananthapuram-2 \nPalakkad-1 \nKasaragod-1 \nMalappuram-1 \nKollam-1"
+        chro[1][2][
+            4
+        ] = "Thiruvananthapuram-2 \nPalakkad-1 \nKasaragod-1 \nMalappuram-1 \nKollam-1"
     data = init_data()
     i = 1
     if "patient" in chro[0][0][0]:
@@ -97,6 +99,7 @@ def parse(url):
                 continue
             if row[1][i + 2]:
                 rem = row[1][i + 2]
+            status = row[1][i + 3]
             if len(dis) > 1:
                 if len(dis[0]) > 1:
                     for t in dis:
@@ -108,6 +111,8 @@ def parse(url):
                                 data[t[0]]["cured_discharged"] = data[t[0]][
                                     "cured_discharged"
                                 ] + int(t[1])
+                            if "Expired" in status:
+                                data[t[0]]["deaths"] = data[t[0]]["deaths"] + int(t[1])
                 else:
                     for t in dis:
                         # manual fix for 'Kasaragod' misspelled as 'Kasargod'
@@ -120,6 +125,8 @@ def parse(url):
                             data[t[0]]["cured_discharged"] = (
                                 data[t[0]]["cured_discharged"] + 1
                             )
+                        if "Expired" in status:
+                            data[t[0]]["deaths"] = data[t[0]]["deaths"] + 1
             else:
                 if len(dis[0]) > 1:
                     for t in dis:
@@ -131,6 +138,8 @@ def parse(url):
                                 data[t[0]]["cured_discharged"] = data[t[0]][
                                     "cured_discharged"
                                 ] + int(t[1])
+                            if "Expired" in status:
+                                data[t[0]]["deaths"] = data[t[0]]["deaths"] + int(t[1])
                 else:
                     for t in dis[0]:
                         data[t]["corona_positive"] = data[t]["corona_positive"] + int(
@@ -140,6 +149,8 @@ def parse(url):
                             data[t]["cured_discharged"] = data[t][
                                 "cured_discharged"
                             ] + int(num)
+                        if "Expired" in status:
+                            data[t]["deaths"] = data[t]["deaths"] + int(num)
     for row in surv.iterrows():
         if "District" in row[1][0]:
             continue
