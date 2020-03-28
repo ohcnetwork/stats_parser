@@ -13,3 +13,5 @@
   * Unidentifiable error in pdf file, **not fixed**
 * bule_25032020.pdf
   * Chronology table has a error, ~~**manual fix issued**~~ 
+* Daily-Bulletin-HFWD-English-28th-March.pdf
+  * Thiruvananthapuram misspelled in chronology table, ~~**manual fix issued**~~
