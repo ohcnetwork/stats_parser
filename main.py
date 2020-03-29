@@ -73,6 +73,10 @@ def parse(url):
         chro[1][2][
             4
         ] = "Thiruvananthapuram-2 \nPalakkad-1 \nKasaragod-1 \nMalappuram-1 \nKollam-1"
+    # manual fix for Daily-Bulletin-English-29th-March.pdf
+    if "29th-March" in url:
+        chro[1][2][3] = "Thiruvananthapuram-2 \nPalakkad-1 \nKasaragod-1 \nMalappuram-1 \nKollam-1"
+        chro[1][2][4] = "Kannur-8 \nKasaragod-7 \nThiruvananthapuram-1 \nErnakulam-1 \nThrissur-1 \n Palakkad-1 \nMalappuram-1"
     data = init_data()
     i = 1
     if "patient" in chro[0][0][0]:
