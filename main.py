@@ -135,6 +135,10 @@ def parse(url):
             else:
                 if len(dis[0]) > 1:
                     for t in dis:
+                        if t[0] == "Thiriruvanathapuram":
+                            t[0] = "Thiruvananthapuram"
+                        if t[0] == "Kannu":
+                            t[0] = "Kannur"
                         if t[0]:
                             data[t[0]]["corona_positive"] = data[t[0]][
                                 "corona_positive"

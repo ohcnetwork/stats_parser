@@ -19,3 +19,6 @@
   * Thiruvananthapuram misspelled in chronology table, ~~**manual fix issued**~~
 * Daily-Bulletin-HFWD-English-30th-March.pdf
   * Thiruvananthapuram misspelled in chronology table, ~~**manual fix issued**~~
+* Daily-Bulletin-HFWD-English-March-31.pdf
+  * Thiruvananthapuram misspelled in chronology table, ~~**manual fix issued**~~
+  * Kannur misspelled in chronology table, ~~**manual fix issued**~~
