@@ -74,11 +74,18 @@ def parse(url):
         i = 0
     num, rem, dis = "", "", ""
 
-    def remove_unwanted(s):
-        return re.sub("[\(\[].*?[\)\]]", "", s.replace(" ", "").replace(",", ""))
-
     def dis_parse(s):
-        return list(map(remove_unwanted, re.compile("[-–]").split(s)))
+        return list(
+            map(
+                re.compile("[-–]").split,
+                re.sub(
+                    "[\(\[].*?[\)\]]",
+                    "",
+                    s.replace(" ", "").replace(",", ""),
+                    flags=re.DOTALL,
+                ).splitlines(),
+            )
+        )
 
     for ch in chro:
         for row in ch.iterrows():
@@ -89,7 +96,7 @@ def parse(url):
             if row[1][i].isnumeric():
                 num = int(row[1][i])
             if row[1][i + 1]:
-                dis = list(map(dis_parse, row[1][i + 1].splitlines()))
+                dis = dis_parse(row[1][i + 1])
             else:
                 continue
             if row[1][i + 2]:
