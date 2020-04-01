@@ -150,16 +150,19 @@ def parse(url):
                             if "Expired" in status:
                                 data[t[0]]["deaths"] = data[t[0]]["deaths"] + int(t[1])
                 else:
+                    inc = 1
+                    if (row[1][i]):
+                        inc = int(num)
                     for t in dis[0]:
-                        data[t]["corona_positive"] = data[t]["corona_positive"] + int(
-                            num
-                        )
+                        data[t]["corona_positive"] = data[t]["corona_positive"] + inc
                         if "Negative" in rem:
                             data[t]["cured_discharged"] = data[t][
                                 "cured_discharged"
-                            ] + int(num)
+                            ] + inc
                         if "Expired" in status:
-                            data[t]["deaths"] = data[t]["deaths"] + int(num)
+                            data[t]["deaths"] = data[t][
+                                "deaths"
+                            ] + inc
     for row in surv.iterrows():
         if "District" in row[1][0]:
             continue
